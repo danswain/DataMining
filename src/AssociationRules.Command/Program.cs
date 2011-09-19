@@ -18,34 +18,14 @@ namespace DataMining.MarketBasketAnalysis
 
             List<int[]> setsCollection = new List<int[]>{set1,set2,set3,set4,set5,set6};
 
-            var combinedSets = set1
-                .Combine(set2)
-                .Combine(set3)
-                .Combine(set4)
-                .Combine(set5)
-                .Combine(set6);
-
-
+            var combinedSets = setsCollection.CombineSets();
 
             var frequencies = GetFrequencies(combinedSets);
 
             var minSupportReached = frequencies.Where(x => x.Frequency >= 2);
 
-
-            var supports = GenerateCandidates(minSupportReached.ToList(), (name, firstVal, secondVal) =>
-                                                                             {
-                                                                                 int count = 0;
-
-                                                                                 foreach (var set in setsCollection)
-                                                                                 {
-                                                                                     if (set.Contains(firstVal) && set.Contains(secondVal))
-                                                                                         count++;
-                                                                                 }
-                                                                                 return count;
-
-
-
-                                                                             });
+            var supports = GenerateCandidates(minSupportReached.ToList(), 
+                (name, firstVal, secondVal) => setsCollection.Count(set => set.Contains(firstVal) && set.Contains(secondVal)));
 
             var minSets = supports.Where(x => x.Value >= 2).ToDictionary(x => x.Key);
 

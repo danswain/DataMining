@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataMining.MarketBasketAnalysis
@@ -14,15 +15,18 @@ namespace DataMining.MarketBasketAnalysis
             return combinedCollection;
         }
 
-        public static IEnumerable<T>  CombineSets<T>(this IEnumerable<T> collection)
+        public static IEnumerable<T>  CombineSets<T>(this IEnumerable<IEnumerable<T>> intputEnumerable)
         {
             var combined = new List<T>();
-            foreach (var item in collection)
+            foreach (var array in intputEnumerable)
             {
-                return null;
+                foreach(var item in array)
+                {
+                    combined.Add(item);
+                }
             }
 
-            return null;
+            return combined;
         }
     }
 }
