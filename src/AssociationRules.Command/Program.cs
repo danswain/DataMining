@@ -16,7 +16,7 @@ namespace DataMining.MarketBasketAnalysis
             var set5 = new int[] { 3, 4 };
             var set6 = new int[] { 2, 4 };
 
-            List<int[]> setsCollection = new List<int[]>{set1,set2,set3,set4,set5,set6};
+            var setsCollection = new List<int[]>{set1,set2,set3,set4,set5,set6};
 
             var combinedSets = setsCollection.CombineSets();
 
@@ -28,6 +28,12 @@ namespace DataMining.MarketBasketAnalysis
                 (name, firstVal, secondVal) => setsCollection.Count(set => set.Contains(firstVal) && set.Contains(secondVal)));
 
             var minSets = supports.Where(x => x.Value >= 2).ToDictionary(x => x.Key);
+
+            double com = combinedSets.Count();
+            double support = minSets["3-4"].Value / com;
+
+            double freq = frequencies.Count(x => x.Value == 3);
+            double confidence = support/(freq);
 
 
 
