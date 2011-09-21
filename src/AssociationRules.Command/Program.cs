@@ -27,15 +27,32 @@ namespace DataMining.MarketBasketAnalysis
             var supports = GenerateCandidates(minSupportReached.ToList(), 
                 (name, firstVal, secondVal) => setsCollection.Count(set => set.Contains(firstVal) && set.Contains(secondVal)));
 
-            var minSets = supports.Where(x => x.Value >= 2).ToDictionary(x => x.Key);
-
-            double com = combinedSets.Count();
-            double support = minSets["3-4"].Value / com;
-
-            double freq = frequencies.Count(x => x.Value == 3);
-            double confidence = support/(freq);
+            var candidateSetsThatMeetMinimumSupport = supports.Where(x => x.Value >= 2).ToDictionary(x => x.Key);
 
 
+
+            double support = candidateSetsThatMeetMinimumSupport["3-4"].Value;
+
+            double probability3 = frequencies.Where(x => x.Name == "3").SingleOrDefault().Frequency;
+
+            double probability4 = frequencies.Where(x => x.Name == "4").SingleOrDefault().Frequency;
+            
+            double probability3_4 = support;
+            
+            //Final
+            double confidence = probability3_4/ probability3;
+            double lift = confidence / (probability3 / setsCollection.Count * probability4 / setsCollection.Count);
+
+            if(lift >1)
+                Console.WriteLine("3-4 are POSITIVELY Correlated");
+            if(lift == 1)
+                Console.WriteLine("3-4 are INDEPENDANT");
+            if (lift < 1)
+                Console.WriteLine("3-4 are NEGATIVELY Correlated");
+
+
+
+            Console.WriteLine("Lift 3 --> 4 is " + lift);
 
             Console.ReadLine();
         }
