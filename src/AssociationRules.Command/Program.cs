@@ -30,29 +30,50 @@ namespace DataMining.MarketBasketAnalysis
             var candidateSetsThatMeetMinimumSupport = supports.Where(x => x.Value >= 2).ToDictionary(x => x.Key);
 
 
+            var candidateDictionary = new Dictionary<string, Result>();
 
-            double support = candidateSetsThatMeetMinimumSupport["3-4"].Value;
+            foreach (var candidate in candidateSetsThatMeetMinimumSupport)
+            {
+                //double support = candidateSetsThatMeetMinimumSupport["3-4"].Value;
+                double support = candidate.Value.Value;
+                //double probability3 = frequencies.Where(x => x.Name == "3").SingleOrDefault().Frequency;
+                double probabilityA = frequencies.Where(x => x.Name == candidate.Key[0].ToString()).SingleOrDefault().Frequency;
 
-            double probability3 = frequencies.Where(x => x.Name == "3").SingleOrDefault().Frequency;
+                //double probability4 = frequencies.Where(x => x.Name == "4").SingleOrDefault().Frequency;
+                double probabilityB = frequencies.Where(x => x.Name == candidate.Key[2].ToString()).SingleOrDefault().Frequency;
 
-            double probability4 = frequencies.Where(x => x.Name == "4").SingleOrDefault().Frequency;
-            
-            double probability3_4 = support;
-            
-            //Final
-            double confidence = probability3_4/ probability3;
-            double lift = confidence / (probability3 / setsCollection.Count * probability4 / setsCollection.Count);
+                //double probability3_4 = support;
+                double probabilityA_B = support;
 
-            if(lift >1)
-                Console.WriteLine("3-4 are POSITIVELY Correlated");
-            if(lift == 1)
-                Console.WriteLine("3-4 are INDEPENDANT");
-            if (lift < 1)
-                Console.WriteLine("3-4 are NEGATIVELY Correlated");
+                //Final
+                //double confidence = probability3_4 / probability3;
+
+                double confidence = probabilityA_B / probabilityA;
+
+                //double lift = confidence / (probability3 / setsCollection.Count * probability4 / setsCollection.Count);
+                double lift = confidence / (probabilityA / setsCollection.Count * probabilityB / setsCollection.Count);
+
+                candidateDictionary.Add(candidate.Key,new Result
+                                                          {
+                                                              Name = candidate.Key,
+                                                              Confidence = confidence,
+                                                              Lift = lift
+                                                          });
+
+            }
 
 
 
-            Console.WriteLine("Lift 3 --> 4 is " + lift);
+
+            foreach (var result in candidateDictionary)
+            {
+                if(result.Value.Lift >1)
+                Console.WriteLine(string.Format("{0} POSITIVELY CORRELATED Confidence->{1} Lift->{2}",result.Value.Name,result.Value.Confidence,result.Value.Lift));
+                if (result.Value.Lift == 1)
+                    Console.WriteLine(string.Format("{0} ARE INDEPENDANT Confidence->{1} Lift->{2}",result.Value.Name,result.Value.Confidence,result.Value.Lift));
+                if (result.Value.Lift < 1)
+                    Console.WriteLine(string.Format("{0} NEGATIVELY CORRELATED Confidence->{1} Lift->{2}", result.Value.Name, result.Value.Confidence, result.Value.Lift));
+            }            
 
             Console.ReadLine();
         }
@@ -89,6 +110,13 @@ namespace DataMining.MarketBasketAnalysis
 
             return result;
         }
+    }
+
+    public class Result
+    {
+        public double Lift { get; set; }
+        public double Confidence { get; set; }
+        public string Name { get; set; }
     }
 
     public class Item
