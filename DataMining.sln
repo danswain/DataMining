@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMining.MarketBasketAnalysis", "src\AssociationRules.Command\DataMining.MarketBasketAnalysis.csproj", "{7FC91F19-1884-426C-A651-52416237D91E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMining.MarketBasketAnalysis", "src\MarketBasketAnalysis\DataMining.MarketBasketAnalysis.csproj", "{7FC91F19-1884-426C-A651-52416237D91E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
